@@ -1,11 +1,12 @@
 from vosk import Model, KaldiRecognizer
 import pyaudio
+import time
+import os.path
 
 
 class SpeechToText:
-    def __init__(self, model, text_file) -> None:
+    def __init__(self, model) -> None:
         self.model = Model(model)
-        self.text_file = text_file
         self.recognizer = KaldiRecognizer(self.model, 16000)
         self.microphone = pyaudio.PyAudio()
         self.stream = self.microphone.open(
@@ -21,7 +22,11 @@ class SpeechToText:
         print("Listening...")
         print("Say 'stop', 'exit', 'quit' or 'end' to stop.")
 
-        with open(self.text_file, "w") as file:
+        text_file = time.strftime("%d-%m-%Y-%H-%M-%S", time.localtime())
+        log_dir = os.path.join(os.getcwd(), "logs")
+        log_path = os.path.join(log_dir, f"{text_file}.log")
+
+        with open(log_path, "w") as file:
             while True:
                 data = self.stream.read(4096)
 
@@ -47,9 +52,8 @@ if __name__ == "__main__":
     ####################################################################################################
     model_path = r"C:\Users\User\PycharmProjects\SpeechToText\vosk-model-small-en-us-0.15"  # English  #
     # model_path = r"C:\Users\User\PycharmProjects\SpeechToText\vosk-model-small-pl-0.22"  # Polish    #
-    file_name = "audio.txt"  # Text file where speech output will be stored                            #
     ####################################################################################################
-    stt = SpeechToText(model_path, file_name)
+    stt = SpeechToText(model_path)
 
     try:
         stt.recognize()
