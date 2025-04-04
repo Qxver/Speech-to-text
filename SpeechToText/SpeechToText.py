@@ -49,13 +49,10 @@ class SpeechToText:
 
 
 if __name__ == "__main__":
-    ####################################################################################################
-    model_path = r"C:\Users\User\PycharmProjects\SpeechToText\vosk-model-small-en-us-0.15"  # English  #
-    # model_path = r"C:\Users\User\PycharmProjects\SpeechToText\vosk-model-small-pl-0.22"  # Polish    #
-    ####################################################################################################
+    model_dir = os.getcwd()
+    model_path = os.path.join(model_dir, "vosk-model-en-us-0.22")  # English
+    # model_path = os.path.join(model_dir, "vosk-model-small-pl-0.22")  # Polish
     stt = SpeechToText(model_path)
 
-    try:
-        stt.recognize()
-    finally:
-        stt.close()
+    stt.recognize()
+    stt.close()
